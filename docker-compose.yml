@@ -1,34 +1,12 @@
 version: '3'
 services:
-    postgres:
-        image: postgres
-        environment:
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-    scheduler:
-        image: apache/airflow
-        command: scheduler
-        restart: always
-        depends_on:
-            - postgres
-        env_file:
-            - .env
-        volumes:
-            - ./dags:/opt/airflow/dags
-            - ./logs:/opt/airflow/logs
     webserver:
-        image: apache/airflow
-        entrypoint: ./scripts/entrypoint.sh
+        image: puckel/docker-airflow
         restart: always
-        depends_on:
-            - postgres
-            - scheduler
-        env_file:
-            - .env
+        environment:
+            - FERNET_KEY=ydKflPZ2P2dq03Tziz7bMjMyoI4fKTlaFw8QmpqbP7E=
         volumes:
-            - ./dags:/opt/airflow/dags
-            - ./logs:/opt/airflow/logs
-            - ./scripts:/opt/airflow/scripts
+            - ./dags:/usr/local/airflow/dags
+            - ./logs:/usr/local/airflow/logs
         ports:
             - "8080:8080"
